@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, gql } = require("apollo-server");
 
 // This is a (sample) collection of books we'll be able to query
 // the GraphQL server for.  A more complete example might fetch
@@ -6,14 +6,28 @@ const { ApolloServer, gql } = require('apollo-server');
 const posts = [
   {
     id: 1,
-    title: 'Harry Potter and the Chamber of Secrets',
-    content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis',
+    title: "Harry Potter and the Chamber of Secrets",
+    content:
+      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis",
+    comments: [
+      {
+        id: 1,
+        content:
+          "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong."
+      },
+      {
+        id: 2,
+        content:
+          "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis"
+      }
+    ]
   },
   {
     id: 2,
-    title: 'Jurassic Park',
-    content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis',
-  },
+    title: "Jurassic Park",
+    content:
+      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis"
+  }
 ];
 
 // Type definitions define the "shape" of your data and specify
@@ -21,11 +35,16 @@ const posts = [
 const typeDefs = gql`
   # Comments in GraphQL are defined with the hash (#) symbol.
 
-  # This "Book" type can be used in other type declarations.
+  type Comment {
+    id: ID!
+    content: String
+  }
+
   type Post {
     id: ID!
     title: String
     content: String
+    comments: [Comment]
   }
 
   # The "Query" type is the root of all GraphQL queries.
@@ -41,8 +60,8 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     posts: () => posts,
-    post: (root, args) => posts.find(post => +post.id === +args.id),
-  },
+    post: (root, args) => posts.find(post => +post.id === +args.id)
+  }
 };
 
 // In the most basic sense, the ApolloServer can be started
